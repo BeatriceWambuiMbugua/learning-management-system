@@ -1,8 +1,8 @@
-import { UserButton } from "@clerk/nextjs";
+
 
 const HomePage = () => {
     return ( <div>
-        <UserButton/>
+       This is Home
     </div> );
 }
  

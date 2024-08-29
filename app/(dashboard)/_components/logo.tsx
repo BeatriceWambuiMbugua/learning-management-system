@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { IoCodeWorking } from "react-icons/io5";
 
 const Logo = () => {

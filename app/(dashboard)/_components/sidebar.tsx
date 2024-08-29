@@ -1,4 +1,5 @@
 import Logo from "./logo"
+import { SideRoutes } from "./sideroutes"
 
 export const Sidebar = () =>{
     return (
@@ -6,6 +7,10 @@ export const Sidebar = () =>{
            <div className="py-6 px-4">
             <Logo/>
            </div>
+           <div className="flex flex-col w-full">
+            <SideRoutes/>
+           </div>
+
         </div>
     )
 }

@@ -7,7 +7,7 @@ const Logo = () => {
         <div className="flex gap-1 items-center hover:opacity-80 hover:cursor-pointer hover:transition-opacity">
             <div className="p-1 bg-slate-50 inline-flex shadow-sm rounded-full border-slate-100 border">
                 <div className="p-2 border border-blue-700 rounded-full">
-                    <IoCodeWorking size={28} className="text-[#333333]" />
+                    <IoCodeWorking size={28} className="text-gray-600" />
                 </div>
             </div>
             <div>

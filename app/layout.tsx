@@ -23,10 +23,6 @@ export default function RootLayout({
           "min-h-screen bg-background font-sans antialiased",
           inter.className
         )}>
-        
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
           {children}
           </body>
       </html>

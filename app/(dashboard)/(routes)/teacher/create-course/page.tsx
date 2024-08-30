@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import axios from "axios"
+import { toast } from "sonner"
 
 
 const formSchema = z.object({
@@ -32,7 +33,7 @@ const CreateCourse = () => {
             const response = await axios.post("/api/courses", values)
             router.push(`/teacher/courses/${response.data.id}`)
         } catch {
-            console.log("Something went wrong")
+            toast.error("Something went wrong")
         }
     }
 

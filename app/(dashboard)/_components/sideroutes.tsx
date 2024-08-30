@@ -1,8 +1,9 @@
 "use client"
 
-import { IoCompassOutline } from "react-icons/io5"
+import { IoBarChart, IoCompassOutline, IoList } from "react-icons/io5"
 import { LuLayoutGrid } from "react-icons/lu"
 import { SideItems } from "./sideitems"
+import { usePathname } from "next/navigation"
 
 const guestRoutes = [
     {
@@ -16,9 +17,25 @@ const guestRoutes = [
         href: "/search"
     }
 ]
+const teacherRoutes = [
+    {
+        icon: IoList,
+        label: "Courses",
+        href: "/teacher/courses"
+    },
+    {
+        icon: IoBarChart,
+        label: "Analytics",
+        href: "/teacher/analytics"
+    }
+]
 
 export const SideRoutes = () => {
-    const routes = guestRoutes;
+    const pathName = usePathname();
+
+    const isTeacherPage = pathName.includes("/teacher")
+
+    const routes = isTeacherPage ? teacherRoutes : guestRoutes;
     return (
         <div className="w-full flex flex-col">
             {

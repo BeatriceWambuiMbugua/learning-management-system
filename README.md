@@ -45,8 +45,8 @@ Coding Diary is a comprehensive Learning Management System (LMS) designed to str
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/coding-diary.git
-   cd coding-diary
+   git clone https://github.com/BeatriceWambuiMbugua/learning-management-system.git
+   cd learning-management-system
    ```
 
 2. **Install dependencies:**

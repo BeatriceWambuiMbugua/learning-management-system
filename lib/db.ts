@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client'
-import { withOptimize } from "@prisma/extension-optimize";
+
 
 const prismaClientSingleton = () => {
   return new PrismaClient()

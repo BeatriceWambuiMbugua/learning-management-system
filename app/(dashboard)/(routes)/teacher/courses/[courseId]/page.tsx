@@ -3,6 +3,7 @@ import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { LuLayoutDashboard } from "react-icons/lu";
+import TitleForm from "./_components/title-form";
 
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
@@ -49,13 +50,18 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <div className="grid grid-cols-1 md:gridl-cols-2 gap-6 mt-16">
                 <div>
                     <div className="flex items-center gap-x-2">
-                        <Button size={"sm"} variant={"secondary"} className="rounded-full bg-emerald-100 text-emerald-700">
+                        <Button size={"icon"} variant={"secondary"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
                             <LuLayoutDashboard />
                         </Button>
                         <h2>
                             Customize your course
                         </h2>
                     </div>
+                    <TitleForm
+                    initialData = {course}
+                    courseId = {course.id}
+
+                    />
                 </div>
 
             </div>

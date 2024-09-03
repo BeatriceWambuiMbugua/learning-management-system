@@ -7,7 +7,6 @@ const CoursePage = () => {
         <Link href={"/teacher/create-course"} >
         <Button size={"sm"} variant={"default"}>
             New Course
-
         </Button>
         </Link>
     </div>

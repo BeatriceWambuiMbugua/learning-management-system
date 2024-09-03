@@ -1,5 +1,6 @@
 "use client"
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -14,38 +15,41 @@ import {
     FormItem,
     FormLabel,
     FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
-import { toast } from "sonner";
+} from "@/components/ui/form";
+import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { Course } from "@prisma/client";
 
-interface TitleFormProps {
-    initialData: { title: string }
+interface DescriptionFormProps {
+    initialData: Course;
     courseId: string
 }
 
 const formSchema = z.object({
-    title: z.string().min(2, { message: "Title must be at least 2 characters." }),
+    description: z.string().min(2, { message: "Description must be at least 2 characters." }),
 })
-const TitleForm: React.FC<TitleFormProps> = ({ initialData, courseId }) => {
+const DescriptionForm: React.FC<DescriptionFormProps> = ({ initialData, courseId }) => {
     const [isEditing, setIsEditing] = useState(false)
     const toggleEdit = () => setIsEditing((current) => !current)
     const router = useRouter()
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData
+        defaultValues: {
+            description: initialData?.description || ""
+        }
     })
 
     const { isSubmitting, isValid } = form.formState
 
     const onSubmit = async (values: z.infer<typeof formSchema>) => {
-        console.log("Title Form", values)
+        console.log("Description Form", values)
         try {
             const response = await axios.patch(`/api/courses/${courseId}`, values)
             if (response.status === 200) {
-                toast.success("Title updated successfully")
+                toast.success("Description updated successfully")
                 toggleEdit()
                 router.refresh()
             }
@@ -58,7 +62,7 @@ const TitleForm: React.FC<TitleFormProps> = ({ initialData, courseId }) => {
     return (
         <div className="mt-6 border bg-slate-100 rounded-md p-4">
             <div className="font-medium flex items-center justify-between">
-                <h1>Course Title</h1>
+                <h1>Course Description</h1>
                 <Button variant={"ghost"} onClick={toggleEdit}>
                     {isEditing ? (
                         <>Cancel</>
@@ -66,7 +70,7 @@ const TitleForm: React.FC<TitleFormProps> = ({ initialData, courseId }) => {
                         (
                             <>
                                 <GoPencil className="h-4 w-4 mr-2" />
-                                Edit Title
+                                Edit Description
                             </>
                         )
                     }
@@ -74,8 +78,8 @@ const TitleForm: React.FC<TitleFormProps> = ({ initialData, courseId }) => {
             </div>
             {
                 !isEditing && (
-                    <p className="text-sm mt-2">
-                        {initialData.title}
+                    <p className={cn("text-sm mt-2", !initialData.description && "text-slate-500, italic")}>
+                        {initialData.description || "No Description"}
                     </p>
                 )
             }
@@ -85,18 +89,17 @@ const TitleForm: React.FC<TitleFormProps> = ({ initialData, courseId }) => {
                         <form onSubmit={form.handleSubmit(onSubmit)}
                             className="space-y-4 mt-4"
                         >
-
                             <FormField
                                 control={form.control}
-                                name="title"
+                                name="description"
                                 render={({ field }) => (
                                     <FormItem>
-                                        <FormLabel>Title</FormLabel>
+                                        <FormLabel>Description</FormLabel>
                                         <FormControl>
-                                            <Input placeholder="e.g. 'Advanced Web Development..'" {...field} disabled={isSubmitting} />
+                                            <Textarea placeholder="e.g. 'This course is about..." {...field} disabled={isSubmitting} />
                                         </FormControl>
                                         <FormDescription>
-                                            This is your update course Title.
+                                            This is your update course Description.
                                         </FormDescription>
                                         <FormMessage />
                                     </FormItem>
@@ -104,13 +107,11 @@ const TitleForm: React.FC<TitleFormProps> = ({ initialData, courseId }) => {
                             />
                             <Button type="submit" disabled={!isValid || isSubmitting}>Save</Button>
                         </form>
-
                     </Form>
                 )
             }
-
         </div>
     );
 }
 
-export default TitleForm;
+export default DescriptionForm;

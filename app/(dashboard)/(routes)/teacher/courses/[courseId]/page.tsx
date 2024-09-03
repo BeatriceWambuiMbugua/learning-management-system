@@ -4,6 +4,8 @@ import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 import { LuLayoutDashboard } from "react-icons/lu";
 import TitleForm from "./_components/title-form";
+import DescriptionForm from "./_components/description-form";
+import ImageForm from "./_components/image-upload";
 
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
@@ -47,7 +49,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 </div>
 
             </div>
-            <div className="grid grid-cols-1 md:gridl-cols-2 gap-6 mt-16">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-16">
                 <div>
                     <div className="flex items-center gap-x-2">
                         <Button size={"icon"} variant={"secondary"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
@@ -60,7 +62,14 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                     <TitleForm
                     initialData = {course}
                     courseId = {course.id}
-
+                    />
+                    <DescriptionForm
+                    initialData = {course}
+                    courseId = {course.id}
+                    />
+                    <ImageForm
+                    initialData = {course}
+                    courseId = {course.id}
                     />
                 </div>
 

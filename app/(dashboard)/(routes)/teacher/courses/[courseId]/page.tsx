@@ -2,10 +2,13 @@ import { Button } from "@/components/ui/button";
 import prisma from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
-import { LuLayoutDashboard } from "react-icons/lu";
+import { LuLayoutDashboard, LuListChecks } from "react-icons/lu";
 import TitleForm from "./_components/title-form";
 import DescriptionForm from "./_components/description-form";
 import ImageForm from "./_components/image-upload";
+import CategoryForm from "./_components/category-form";
+import { AiOutlineDollar } from "react-icons/ai";
+import PriceForm from "./_components/price-form";
 
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
@@ -17,6 +20,14 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             id: params.courseId
         },
     })
+
+    const categories = await prisma.category.findMany({
+        orderBy: {
+            name: "asc"
+        }
+    })
+
+    console.log(categories)
 
     if (!course || !userId) {
         return redirect("/")
@@ -55,24 +66,59 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                         <Button size={"icon"} variant={"secondary"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
                             <LuLayoutDashboard />
                         </Button>
-                        <h2>
+                        <h2 className="text-base font-medium">
                             Customize your course
                         </h2>
                     </div>
                     <TitleForm
-                    initialData = {course}
-                    courseId = {course.id}
+                        initialData={course}
+                        courseId={course.id}
                     />
                     <DescriptionForm
-                    initialData = {course}
-                    courseId = {course.id}
+                        initialData={course}
+                        courseId={course.id}
                     />
                     <ImageForm
-                    initialData = {course}
-                    courseId = {course.id}
+                        initialData={course}
+                        courseId={course.id}
+                    />
+                    <CategoryForm
+                        initialData={course}
+                        courseId={course.id}
+                        options={categories.map((category) => (
+                            { label: category.name, value: category.id }
+                        ))}
                     />
                 </div>
-
+                <div className="space-y-6">
+                    <div>
+                        <div className="flex items-center gap-x-2">
+                            <Button size={"icon"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
+                                <LuListChecks />
+                            </Button>
+                            <h2 className="text-base font-medium">
+                                Customize your Chapters
+                            </h2>
+                        </div>
+                        <div>
+                            TODO: Chapters
+                        </div>
+                    </div>
+                    <div>
+                        <div className="flex items-center gap-x-2">
+                            <Button size={"icon"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
+                                <AiOutlineDollar size={20} />
+                            </Button>
+                            <h2 className="text-base font-medium">
+                                Sell Your Course
+                            </h2>
+                        </div>
+                        <PriceForm
+                        initialData={course}
+                        courseId={course.id}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

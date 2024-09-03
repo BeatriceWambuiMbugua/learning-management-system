@@ -20,9 +20,10 @@ import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { Course } from "@prisma/client";
 
 interface DescriptionFormProps {
-    initialData: { description: string }
+    initialData: Course;
     courseId: string
 }
 
@@ -36,7 +37,9 @@ const DescriptionForm: React.FC<DescriptionFormProps> = ({ initialData, courseId
 
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
-        defaultValues: initialData
+        defaultValues: {
+            description: initialData?.description || ""
+        }
     })
 
     const { isSubmitting, isValid } = form.formState

@@ -9,6 +9,8 @@ import ImageForm from "./_components/image-upload";
 import CategoryForm from "./_components/category-form";
 import { AiOutlineDollar } from "react-icons/ai";
 import PriceForm from "./_components/price-form";
+import { FaRegFile } from "react-icons/fa";
+import AttachmentForm from "./_components/attachment-form";
 
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
@@ -19,6 +21,13 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         where: {
             id: params.courseId
         },
+        include: {
+            attachments: {
+                orderBy:{
+                    createdAt: "desc"
+                }
+            }
+        }
     })
 
     const categories = await prisma.category.findMany({
@@ -27,7 +36,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         }
     })
 
-    console.log(categories)
+   
 
     if (!course || !userId) {
         return redirect("/")
@@ -64,7 +73,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 <div>
                     <div className="flex items-center gap-x-2">
                         <Button size={"icon"} variant={"secondary"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
-                            <LuLayoutDashboard />
+                            <LuLayoutDashboard size={20} />
                         </Button>
                         <h2 className="text-base font-medium">
                             Customize your course
@@ -94,7 +103,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                     <div>
                         <div className="flex items-center gap-x-2">
                             <Button size={"icon"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
-                                <LuListChecks />
+                                <LuListChecks size={20} />
                             </Button>
                             <h2 className="text-base font-medium">
                                 Customize your Chapters
@@ -117,6 +126,20 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                         initialData={course}
                         courseId={course.id}
                         />
+                    </div>
+                    <div>
+                         <div className="flex items-center gap-x-2">
+                            <Button size={"icon"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
+                                <FaRegFile size={20} />
+                            </Button>
+                            <h2 className="text-base font-medium">
+                                Resources and Attachments
+                            </h2>
+                        </div>
+                         <AttachmentForm
+                        initialData={course}
+                        courseId={course.id}
+                    />
                     </div>
                 </div>
             </div>

@@ -11,19 +11,31 @@ import { AiOutlineDollar } from "react-icons/ai";
 import PriceForm from "./_components/price-form";
 import { FaRegFile } from "react-icons/fa";
 import AttachmentForm from "./_components/attachment-form";
+import ChapterForm from "./_components/chapter-form";
 
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
 
-    const { userId } = await auth();
+    const { userId } =  auth();
+
+    if(!userId) {
+        return redirect("/")
+    }
 
     const course = await prisma.course.findUnique({
         where: {
-            id: params.courseId
+            id: params.courseId,
+            userId
         },
         include: {
-            attachments: {
+            chapters:{
                 orderBy:{
+                    position: "asc"
+                }
+
+            },
+            attachments: {
+                orderBy: {
                     createdAt: "desc"
                 }
             }
@@ -36,9 +48,9 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         }
     })
 
-   
 
-    if (!course || !userId) {
+
+    if (!course) {
         return redirect("/")
     }
 
@@ -47,7 +59,8 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
         course.description,
         course.imageUrl,
         course.price,
-        course.categoryId
+        course.categoryId,
+        course.chapters.some(chapter  => chapter.isPublished)
     ]
 
     const totalFields = requiredFields.length
@@ -110,7 +123,10 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                             </h2>
                         </div>
                         <div>
-                            TODO: Chapters
+                            <ChapterForm
+                                initialData={course}
+                                courseId={course.id}
+                            />
                         </div>
                     </div>
                     <div>
@@ -123,12 +139,12 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                             </h2>
                         </div>
                         <PriceForm
-                        initialData={course}
-                        courseId={course.id}
+                            initialData={course}
+                            courseId={course.id}
                         />
                     </div>
                     <div>
-                         <div className="flex items-center gap-x-2">
+                        <div className="flex items-center gap-x-2">
                             <Button size={"icon"} className="rounded-full bg-emerald-100 text-emerald-700 hover:bg-emerald-700 hover:text-emerald-100">
                                 <FaRegFile size={20} />
                             </Button>
@@ -136,10 +152,10 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                                 Resources and Attachments
                             </h2>
                         </div>
-                         <AttachmentForm
-                        initialData={course}
-                        courseId={course.id}
-                    />
+                        <AttachmentForm
+                            initialData={course}
+                            courseId={course.id}
+                        />
                     </div>
                 </div>
             </div>
